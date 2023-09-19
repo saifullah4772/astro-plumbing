@@ -1,0 +1,147 @@
+---
+const { bodyStyle } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.rawgit.com/michalsnik/aos/2.0.4/dist/aos.css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/animate.css" />
+    <link rel="stylesheet" href="css/slick.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class={bodyStyle}>
+    <slot />
+    <script src="/js/bootstrap.bundle.min.js" is:inline></script>
+    <script src="/js/test.js" is:inline></script>
+    <script src="/js/jquery-3.6.0.min.js" is:inline></script>
+    <script src="/js/slick.min.js" is:inline></script>
+    <script>
+      var jq = $.noConflict();
+      jq(document).ready(function () {
+        if (jq(window).width() > 767) {
+        } else {
+          var stickyTop = jq("section.section.banner_bottom").offset().top;
+          jq(window).on("scroll", function () {
+            if (jq(window).scrollTop() >= stickyTop) {
+              console.log("2");
+              jq(".home header").addClass("sticky_top_mobile");
+              jq("body.home").addClass("sticky_footer_mobile");
+            } else {
+              console.log("5");
+              jq(".home header").removeClass("sticky_top_mobile");
+              jq("body.home").removeClass("sticky_footer_mobile");
+            }
+          });
+        }
+      });
+    </script>
+    <script
+      is:inline
+      src="https://cdn.rawgit.com/michalsnik/aos/2.0.4/dist/aos.js"></script>
+    <script>
+      AOS.init({
+        duration: 1000,
+        once: true,
+      });
+    </script>
+
+    <script>
+      jQuery(document).ready(function () {
+        jQuery("#testimonial_slid").slick({
+          //centerMode: true,
+          //centerPadding: '300px',
+          slidesToShow: 2,
+          arrows: true,
+          dots: true,
+          responsive: [
+            {
+              breakpoint: 991,
+              settings: {
+                arrows: true,
+                slidesToShow: 1,
+              },
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                arrows: true,
+                dots: false,
+                slidesToShow: 1,
+              },
+            },
+          ],
+        });
+        jQuery(document).ready(function () {
+          setTimeout(function () {
+            jQuery(".testimonial_slid button.slick-prev.slick-arrow").appendTo(
+              ".testi_arrows"
+            );
+          }, 100);
+          setTimeout(function () {
+            jQuery(".testimonial_slid button.slick-next.slick-arrow").appendTo(
+              ".testi_arrows"
+            );
+          }, 100);
+        });
+        jQuery(window).resize(function () {
+          setTimeout(function () {
+            jQuery(".testimonial_slid button.slick-prev.slick-arrow").appendTo(
+              ".testi_arrows"
+            );
+          }, 100);
+          setTimeout(function () {
+            jQuery(".testimonial_slid button.slick-next.slick-arrow").appendTo(
+              ".testi_arrows"
+            );
+          }, 100);
+        });
+
+        jQuery(document).ready(function () {
+          jQuery(".reviews_tab_main").click(function () {
+            jQuery("#testimonial_slid").slick("refresh");
+          });
+        });
+
+        if ($(window).width() > 767) {
+          var stickyTop = jQuery(".choose_section").offset().top;
+          jQuery(window).on("scroll", function () {
+            if (jQuery(window).scrollTop() >= stickyTop) {
+              jQuery(".home header").addClass("sticky_top");
+            } else {
+              jQuery(".home header").removeClass("sticky_top");
+            }
+          });
+        } else {
+          var stickyTop = jQuery(".satisfy_bottom").offset().top;
+          jQuery(window).on("scroll", function () {
+            if (jQuery(window).scrollTop() >= stickyTop) {
+              jQuery(".home header").addClass("sticky_top_mobile");
+              jQuery("body.home").addClass("sticky_footer_mobile");
+            } else {
+              jQuery("header").removeClass("sticky_top_mobile");
+              jQuery("body.home").removeClass("sticky_footer_mobile");
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
