@@ -7,7 +7,11 @@ const { bodyStyle, title = "Homepage" } = Astro.props;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
+    <meta
+      name="description"
+      content="We make plumbing simple. Call us, schedule your free inspection, and let us do the rest! Local plumbing specialists available. Call (888) 531-2365."
+    />
+    <title>Plumbers Near You | Call For a Free Estimate | House-Plumbing</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/animate.css" />
@@ -31,12 +35,23 @@ const { bodyStyle, title = "Homepage" } = Astro.props;
   <body class={bodyStyle}>
     <slot />
     <script
+      src="https://code.jquery.com/jquery-3.7.1.js"
+      integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+      crossorigin="anonymous"
+      is:inline></script>
+    <script
+      src="https://b-js.ringba.com/CA8efeb5ed8623493e802a051b5beb905f"
+      is:inline
+      async></script>
+    <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
       is:inline></script>
-    <script src="/js/test.js" is:inline></script>
-    <script src="/js/jquery-3.6.0.min.js" is:inline></script>
+    <script
+      is:inline
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBxgvbMlSGFH3Uy-Vrekqg4ZxnZ2y6M5MU&callback=Function.prototype"
+    ></script>
     <script src="/js/slick.min.js" is:inline></script>
     <script>
       var jq = $.noConflict();
@@ -46,11 +61,9 @@ const { bodyStyle, title = "Homepage" } = Astro.props;
           var stickyTop = jq("section.section.banner_bottom").offset().top;
           jq(window).on("scroll", function () {
             if (jq(window).scrollTop() >= stickyTop) {
-              console.log("2");
               jq(".home header").addClass("sticky_top_mobile");
               jq("body.home").addClass("sticky_footer_mobile");
             } else {
-              console.log("5");
               jq(".home header").removeClass("sticky_top_mobile");
               jq("body.home").removeClass("sticky_footer_mobile");
             }
@@ -124,29 +137,62 @@ const { bodyStyle, title = "Homepage" } = Astro.props;
             jQuery("#testimonial_slid").slick("refresh");
           });
         });
-
-        if ($(window).width() > 767) {
-          var stickyTop = jQuery(".choose_section").offset().top;
-          jQuery(window).on("scroll", function () {
-            if (jQuery(window).scrollTop() >= stickyTop) {
-              jQuery(".home header").addClass("sticky_top");
-            } else {
-              jQuery(".home header").removeClass("sticky_top");
-            }
-          });
-        } else {
-          var stickyTop = jQuery(".satisfy_bottom").offset().top;
-          jQuery(window).on("scroll", function () {
-            if (jQuery(window).scrollTop() >= stickyTop) {
-              jQuery(".home header").addClass("sticky_top_mobile");
-              jQuery("body.home").addClass("sticky_footer_mobile");
-            } else {
-              jQuery("header").removeClass("sticky_top_mobile");
-              jQuery("body.home").removeClass("sticky_footer_mobile");
-            }
-          });
-        }
       });
+    </script>
+    <script>
+      // Function to perform reverse geocoding
+      const element = document.querySelectorAll(".geocodelocation");
+      const elementarray = Array.from(element);
+      function reverseGeocode(latitude, longitude) {
+        const geocoder = new google.maps.Geocoder();
+        const latlng = {
+          lat: parseFloat(latitude),
+          lng: parseFloat(longitude),
+        };
+
+        geocoder.geocode({ location: latlng }, (results, status) => {
+          if (status === "OK") {
+            if (results[0]) {
+              // Extract state and city from the address components
+              let state, city;
+              for (const component of results[0].address_components) {
+                if (component.types.includes("administrative_area_level_1")) {
+                  state = component.short_name;
+                }
+                if (component.types.includes("locality")) {
+                  city = component.long_name;
+                }
+              }
+              elementarray.map((elem) => {
+                elem.innerHTML = `${city}, ${state}`;
+              });
+            } else {
+              console.error("No results found");
+            }
+          } else {
+            console.error("Geocoder failed due to: " + status);
+          }
+        });
+      }
+
+      // Get the user's current location using the Geolocation API
+      navigator.geolocation.watchPosition(
+        (position) => {
+          const latitude = position.coords.latitude;
+          const longitude = position.coords.longitude;
+
+          // Call the reverse geocoding function
+          reverseGeocode(latitude, longitude);
+        },
+        (error) => {
+          console.log(error);
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 2000,
+          maximumAge: 10000,
+        }
+      );
     </script>
   </body>
 </html>
